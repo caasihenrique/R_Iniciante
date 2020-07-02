@@ -1,7 +1,8 @@
 \documentclass[12pt,twoside]{article}
-\usepackage{geometry}
-\geometry{a4paper}
+%\usepackage{geometry}
+%\geometry{a4paper}
 \usepackage[utf8]{inputenc}
+\usepackage{comment}%para comentários multi-linhas
 
 \title{O Começo}
 \author{Isaac Henrique Simões}
@@ -16,9 +17,17 @@
 %\end{titlepage}
 
 \begin{abstract}
-Muito bem. Começo essa empreitada, descrita em "README", redigindo esse texto com intuito de descrever as inteções as quais me propus. Uma delas trata se de me aprimorar com Latex, já começo o aprimoramento a medida que é escrito este documento nesta linguagem. Faço uma observação considerando a minha experiência com asite OVERLEAF, plataforma online para redigir texto com LATEX. Que redigir um documento por meio dos recursos do RSTUIDO, o arquivo de extensão RSWEAVE, há  desvantagens. Não há,pelo menos até onde saiba, corretor automático de ortográfia. Cito isso, porque sou um brasileiro que não sabe acentuar as palavra. E não há autocompletar.
+Muito bem. Inicio esta empreitada, descrita em "README", redigindo este texto com intuito de descrever as inteções as quais me propus. Uma delas trata se de me aprimorar com Latex, já começo o aprimoramento a medida que é escrito este documento nesta linguagem. Faço uma observação considerando a minha experiência com asite OVERLEAF, plataforma online para redigir texto com LATEX. Que redigir um documento por meio dos recursos do RSTUIDO, o arquivo de extensão RSWEAVE, há  desvantagens. Não há,pelo menos até onde saiba, corretor automático de ortográfia. Cito isso, porque sou um brasileiro que não sabe acentuar as palavra. E não há autocompletar.
 Outra intenção é me aperfeiçoar com o versionamento de arquivos com o GIT. Usando o repositório GITHUB. 
 A primeira intenção é buscar execelência na linguagem R que me dê meios para implementar soluções à problemas de otimização.
 \end{abstract}
+
+\section{Introdução}
+
+Começo expondo como escrevo este texto. Para o título da obra usa se \textbackslash{title}\{O Começo\}. O autor, meu nome, é adicionado por \textbackslash{author}\{Isaac Henrique Simões\}. Para data o comando é \textbackslash{date}\{Julho 2020\}. O Abstract aparece de \textbackslash{begin}\{abstract\}...\textbackslash{end}\{abstract\}.A primeira seção uso \textbackslash{section}\{Introdução\}
+
+Os parágrafos, no arquivo ".Rnw" e ".tex", começam com dois comandos "Enter". Para iniciar uma nova linha sem iniciar um parágrafo insira \textbackslash \textbackslash  ou \textbackslash newline.
+
+Já menciono que há caracteres reservados. São \# \$ \% \^{} \& \_ \{ \} \textasciitilde \textbackslash. Para utiliza los use os respectivos comandos \textbackslash\# \textbackslash\$ \textbackslash\% \textbackslash \^{}\{\} \textbackslash\& \textbackslash\_ \textbackslash\{ \textbackslash\} \textbackslash\textasciitilde \textbackslash textbackslash.
 
 \end{document}
