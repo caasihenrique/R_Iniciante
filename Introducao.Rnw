@@ -1,9 +1,21 @@
-\documentclass{article}
+\documentclass[12pt,twoside]{article}
+\usepackage{geometry}
+\geometry{a4paper}
+\usepackage[utf8]{inputenc}
+
+\title{O Começo}
+\author{Isaac Henrique Simões \thanks{Mais um querendo atingir a excelêcia}}
+\date{Julho 2020}
+
 
 \begin{document}
 \SweaveOpts{concordance=TRUE}
 
-Muito bem. Começo essa empreitada, descrita em "README", redigindo esse texto com intuito de descrever as inteções as quais me propus. Uma delas trata se de me aprimorar com Latex, já começo o aprimoramento a medida que é escrito este documento nesta linguagem. Faço uma observação considerando a minha experiência com asite OVERLEAF, plataforma online para redigir texto com LATEX. Que redigir um documento por meio dos recursos do RSTUIDO, o arquivo de extensão RSWEAVE, há uma desvantagem. Não há,pelo menos até onde saiba, corretor automático de ortográfia. Cito isso, porque sou um brasileiro que não sabe acentuar as palavra.
+\begin{titlepage}
+  \maketitle
+\end{titlepage}
+
+Muito bem. Começo essa empreitada, descrita em "README", redigindo esse texto com intuito de descrever as inteções as quais me propus. Uma delas trata se de me aprimorar com Latex, já começo o aprimoramento a medida que é escrito este documento nesta linguagem. Faço uma observação considerando a minha experiência com asite OVERLEAF, plataforma online para redigir texto com LATEX. Que redigir um documento por meio dos recursos do RSTUIDO, o arquivo de extensão RSWEAVE, há  desvantagens. Não há,pelo menos até onde saiba, corretor automático de ortográfia. Cito isso, porque sou um brasileiro que não sabe acentuar as palavra. E não há autocompletar.
 Outra intenção é me aperfeiçoar com o versionamento de arquivos com o GIT. Usando o repositório GITHUB. 
 A primeira intenção é buscar execelência na linguagem R que me dê meios para implementar soluções à problemas de otimização.
 
