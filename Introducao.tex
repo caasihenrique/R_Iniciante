@@ -3,6 +3,9 @@
 %\geometry{a4paper}
 \usepackage[utf8]{inputenc}
 \usepackage{comment}%para comentários multi-linhas
+%\usepackage{minted}
+\usepackage[T1]{fontenc}
+\usepackage[brazilian]{babel}
 
 \title{O Começo}
 \author{Isaac Henrique Simões}
@@ -18,17 +21,93 @@
 %\end{titlepage}
 
 \begin{abstract}
-Muito bem. Inicio esta empreitada, descrita em "README", redigindo este texto com intuito de descrever as inteções as quais me propus. Uma delas trata se de me aprimorar com Latex, já começo o aprimoramento a medida que é escrito este documento nesta linguagem. Faço uma observação considerando a minha experiência com asite OVERLEAF, plataforma online para redigir texto com LATEX. Que redigir um documento por meio dos recursos do RSTUIDO, o arquivo de extensão RSWEAVE, há  desvantagens. Não há,pelo menos até onde saiba, corretor automático de ortográfia. Cito isso, porque sou um brasileiro que não sabe acentuar as palavra. E não há autocompletar.
+\noindent Muito bem. Inicio esta empreitada, descrita em "README", redigindo este texto com intuito de descrever as inteções as quais me propus. Uma delas trata se de me aprimorar com Latex, já começo o aprimoramento a medida que é escrito este documento nesta linguagem. Faço uma observação considerando a minha experiência com asite OVERLEAF, plataforma online para redigir texto com LATEX. Que redigir um documento por meio dos recursos do RSTUIDO, o arquivo de extensão RSWEAVE, há  desvantagens. Não há,pelo menos até onde saiba, corretor automático de ortográfia. Cito isso, porque sou um brasileiro que não sabe acentuar as palavra. E não há autocompletar.
 Outra intenção é me aperfeiçoar com o versionamento de arquivos com o GIT. Usando o repositório GITHUB. 
 A primeira intenção é buscar execelência na linguagem R que me dê meios para implementar soluções à problemas de otimização.
 \end{abstract}
 
 \section{Introdução}
 
-Começo expondo como escrevo este texto. Para o título da obra usa se \textbackslash{title}\{O Começo\}. O autor, meu nome, é adicionado por \textbackslash{author}\{Isaac Henrique Simões\}. Para data o comando é \textbackslash{date}\{Julho 2020\}. O Abstract aparece de \textbackslash{begin}\{abstract\}...\textbackslash{end}\{abstract\}.A primeira seção uso \textbackslash{section}\{Introdução\}
+Começo expondo como escrevo este texto. Para o título da obra usa se \begin{center} \textit{\textbackslash{title}\{O Começo\}}.\end{center} O autor, meu nome, é adicionado por \begin{center} \textit{\textbackslash{author}\{Isaac Henrique Simões\}}. \end{center} Para data o comando é \begin{center}\textit{\textbackslash{date}\{Julho 2020\}}.\end{center} O Abstract aparece pelo comando \begin{center} \textit{\textbackslash{begin}\{abstract\}...\textbackslash{end}\{abstract\}}.\end{center}A primeira seção uso \begin{center}\textit{\textbackslash{section}\{Introdução\}}.\end{center}
 
-Os parágrafos, no arquivo ".Rnw" e ".tex", começam com dois comandos "Enter". Para iniciar uma nova linha sem iniciar um parágrafo insira \textbackslash \textbackslash  ou \textbackslash newline.
+Os parágrafos, no arquivo ".Rnw" e ".tex", começam com dois comandos "Enter". O que resulta em ter que inserir uma linha em branco entre os parágrafos. Para iniciar uma nova linha sem iniciar um parágrafo insira \textbackslash \textbackslash  ou \textbackslash newline.
 
 Já menciono que há caracteres reservados. São \# \$ \% \^{} \& \_ \{ \} \textasciitilde \textbackslash. Para utiliza los use os respectivos comandos \textbackslash\# \textbackslash\$ \textbackslash\% \textbackslash \^{}\{\} \textbackslash\& \textbackslash\_ \textbackslash\{ \textbackslash\} \textbackslash\textasciitilde \textbackslash textbackslash.
+
+\section{Básico}
+
+Dando continuidade. Agora será adicionado os chuck's, ambientes ou trechos de código em R, neste material. Ainda estou em duvida qual conteúdo abordo para exemplificar. Antes de fazer um exemplo escreve-se sobres chuck.
+
+A combinação de Latex e R, por meio de arquivos de extensão .Rnw, permite criar documentos ao mesmo tempo realiza análises. O texto é atribuido pelo Latex enquanto a analise em R está no interior dos chuck's. 
+
+O chuck é dado pelo seguinte comando.
+\begin{center}
+< < > > =
+\\Codigo
+arroba
+\end{center}
+Entre os sinais de maior e menor são passados definidas as opções possiveis.
+\begin{itemize}
+\item label: define uma etiqueta para o chuck
+\item echo: TRUE/FALSE. Por padrão é TRUE. TRUE imprime os codigos em R no documento. FALSE omite a impressão.
+\item fig: TRUE/FALSE. Por padrão é FALSE. TRUE inclui o grafico no documento. FALSE omite.
+\item width: número, que indica a largura da figura em polegadas. O padrão é width=6. 
+\item  height: número, que indica a altura da figura em polegadas. O padrão é height=6.
+\item eval: TRUE/FALSE. Por padrão TRUE. TRUE o codigo é avaliado. FALSE não é avaliado. Serve para quando queremos imprimir o comando no documento mas queremos rodar o código só depois.
+\item result: Um string. Se for igual a verbatim, os resultados aparecem como no R. Se for igual a tex, os resultados aparecem no formato semelhante ao texto do L ATEX . Se for igual a hide, os resultados são omitidos do documento final, mas o código R é executado normalmente. O padrão é results=verbation.
+\item include: TRUE/FALSE. Padrão TRUE. TRUE  a saída do comando R, incluindo os gráficos, devem ser automaticamente inseridos no documento final. FALSE  a saída deve aparecer em um lugar diferente, através de um comando Latex colocado manualmente.
+\item prefix.string: Um string que indica um prefixo comum para os arquivos salvos, como as figuras. O padrão é usar o nome do arquivo .Rnw.
+\end{itemize}
+Atenção
+\begin{enumerate}
+\item As opções width e height não definem o tamanho da figura no documento L ATEX, ele apenas modifica as dimensões dentro do R. Serve para alterar a proporção das imagens de forma a melhor se adequar ao documento.
+\item Os nomes dos arquivos de imagem criados seguem um padrão. Primeiro aparece o nome do arquivo .Rnw, seguido por - e então a numeração do chunk. Caso o chunk tenha a opção label denida, em vez do número do chunk aparece o seu label. Somente é produzida uma figura por chunk. A largura das figuras no documento L ATEX é fixa em 80\% da largura do texto (width=0.8\textbackslash textwidth). Se você quiser modificar pode usar o comando
+\begin{center}
+\textbackslash setkeys\{Gin\}\{width=0.8\textbackslash textwidth\}
+\end{center}
+trocando o valor de 0.8 por outro que você queria. Isso pode ser feito em qualquer momento no texto. 
+\end{enumerate}
+\subsection{Exemplo}
+Vamos agora fazer um código simples em R
+\begin{Schunk}
+\begin{Sinput}
+> require(raster)
+> require(rgdal)
+> lista <- dir("./mapa",full.names = T)
+> mapa.pan <- raster(dir[1])
+> nlayers(mapa.pan)
+> plot(mapa.pan)
+> mapa.RGB <- raster::stack(lista[1:3])
+> nlayers(mapa.RGB)
+> coord <- crs(mapa.RGB)
+> mapa.RGB <- projectRaster(mapa.RGB, crs = '+proj=longlat')
+> plotRGB(mapa.RGB, r = 3, g = 2, b =  1, stretch = 'hist',axes = F)
+> plot(mapa.RGB)
+> mapa.pan <- projectRaster(mapa.pan, crs = '+proj=longlat')
+> plot(mapa.RGB$B2)
+> plot(mapa.RGB$B3)
+> plot(mapa.RGB$B4)
+> corte <- drawExtent(show = F)
+> regiao.B2 <- crop(mapa.RGB$B2,corte)
+> regiao.B3 <- crop(mapa.RGB$B3,corte)
+> regiao.B4 <- crop(mapa.RGB$B4,corte)
+> regiao.B8 <- crop(mapa.pan,corte)
+> writeRaster(regiao.B2, filename= "./mapa/regiao_B2.tif",format='GTiff')
+> writeRaster(regiao.B3, filename= "./mapa/regiao_B3.tif",format='GTiff')
+> writeRaster(regiao.B4, filename= "./mapa/regiao_B4.tif",format='GTiff')
+> writeRaster(regiao.B8, filename= "./mapa/regiao_B8.tif",format='GTiff')
+> roca.RGB <- stack(c(regiao.B2,regiao.B3,regiao.B4))
+> plotRGB(roca.RGB, r = 3, g = 2, b =  1, stretch = 'hist',axes = F)
+> zoom(mapa.RGB, ext=corte, maxpixels = 100000, layer = 1,
++ new=TRUE, useRaster=TRUE)
+> resultadoskMeans <- kmeans(roca.RGB[], centers=8)
+> resultado <- raster(roca.RGB[[1]])
+> resultado <- setValues(resultado, resultadoskMeans$cluster)
+> par(mfrow = c(1,2))
+> plotRGB(roca.RGB, r = 3, g = 2, b =  1, stretch = 'hist',axes = F)
+> plot(resultado)
+\end{Sinput}
+\end{Schunk}
+
 
 \end{document}
