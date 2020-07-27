@@ -1,4 +1,4 @@
-\documentclass[12pt,twoside]{article}
+\documentclass[12pt]{article}%,twocolumn
 %\usepackage{geometry}
 %\geometry{a4paper}
 \usepackage[utf8]{inputenc}
@@ -7,28 +7,79 @@
 \usepackage[T1]{fontenc}
 \usepackage[brazilian]{babel}
 
-\title{O Começo}
+\usepackage[backend = bibtex, sorting = nyt,style=alphabetic]{biblatex}
+%,citestyle=alphabetic-verb
+
+%\usepackage{cite}
+%\usepackage{natbib}
+
+\usepackage{filecontents}
+
+\begin{filecontents}{refs.bib}
+    @article{rosas,
+        title = {Sweave-Interface entre R e LATEX},
+        author = {Rosa, Cassiano Sousa and DeSouza, Og},
+        url = {http://www.professores.uff.br/jessica/wp-content/uploads/sites                 /137/2017/09/aula_sweave.pdf},
+        keywords = {sweave},
+        publisher = {Citeseer}
+      }
+\end{filecontents}
+
+\addbibresource{refs}
+
 \author{Isaac Henrique Simões}
+
+\title{O Começo}
 \date{Julho 2020}
 
 
 \begin{document}
 \SweaveOpts{concordance=TRUE}
 
+%\SweaveOpts{concordance=TRUE}
+
 %\begin{titlepage}
   \maketitle
 %\end{titlepage}
 
 \begin{abstract}
-\noindent Muito bem. Inicio esta empreitada, descrita em "README", redigindo este texto com intuito de descrever as inteções as quais me propus. Uma delas trata se de me aprimorar com Latex, já começo o aprimoramento a medida que é escrito este documento nesta linguagem. Faço uma observação considerando a minha experiência com asite OVERLEAF, plataforma online para redigir texto com LATEX. Que redigir um documento por meio dos recursos do RSTUIDO, o arquivo de extensão RSWEAVE, há  desvantagens. Não há,pelo menos até onde saiba, corretor automático de ortográfia. Cito isso, porque sou um brasileiro que não sabe acentuar as palavra. E não há autocompletar.
+\noindent Muito bem. Inicio esta empreitada, descrita em "README", redigindo este texto com intuito de descrever as inteções as quais me propus. Uma delas trata se de me aprimorar com \LaTeX{}, já começo o aprimoramento a medida que é escrito este documento nesta linguagem. Faço uma observação considerando a minha experiência com asite OVERLEAF, plataforma online para redigir texto com \LaTeX{}. Que redigir um documento por meio dos recursos do RSTUIDO, o arquivo de extensão RSWEAVE, há  desvantagens. Não há,pelo menos até onde saiba, corretor automático de ortográfia. Cito isso, porque sou um brasileiro que não sabe acentuar as palavra. E não há autocompletar.
 Outra intenção é me aperfeiçoar com o versionamento de arquivos com o GIT. Usando o repositório GITHUB. 
 A primeira intenção é buscar execelência na linguagem R que me dê meios para implementar soluções à problemas de otimização.
 \end{abstract}
 
 \section{Introdução}
 
-Começo expondo como escrevo este texto. Para o título da obra usa se \begin{center} \textit{\textbackslash{title}\{O Começo\}}.\end{center} O autor, meu nome, é adicionado por \begin{center} \textit{\textbackslash{author}\{Isaac Henrique Simões\}}. \end{center} Para data o comando é \begin{center}\textit{\textbackslash{date}\{Julho 2020\}}.\end{center} O Abstract aparece pelo comando \begin{center} \textit{\textbackslash{begin}\{abstract\}...\textbackslash{end}\{abstract\}}.\end{center}A primeira seção uso \begin{center}\textit{\textbackslash{section}\{Introdução\}}.\end{center}
-
+Começo expondo como escrevo este texto. Para o título da obra usa se
+  \begin{center}
+    \begin{verbatim}
+      \title{O Começo}
+    \end{verbatim}
+  \end{center}
+O autor, meu nome, é adicionado por 
+  \begin{center}
+    \begin{verbatim}
+      \author{Isaac Henrique Simões}
+    \end{verbatim}
+  \end{center} 
+Para data o comando é 
+  \begin{center}
+    \begin{verbatim}
+      \date{Julho 2020}
+    \end{verbatim}
+  \end{center} 
+O resumo aparece pelo comando
+  \begin{center}
+    \begin{verbatim}
+      \begin{abstract} ... \end{abstract}
+    \end{verbatim}
+  \end{center}
+A primeira seção usa se
+  \begin{center}
+    \begin{verbatim}
+      \section{Introdução}
+    \end{verbatim}
+  \end{center}
 Os parágrafos, no arquivo ".Rnw" e ".tex", começam com dois comandos "Enter". O que resulta em ter que inserir uma linha em branco entre os parágrafos. Para iniciar uma nova linha sem iniciar um parágrafo insira \textbackslash \textbackslash  ou \textbackslash newline.
 
 Já menciono que há caracteres reservados. São \# \$ \% \^{} \& \_ \{ \} \textasciitilde \textbackslash. Para utiliza los use os respectivos comandos \textbackslash\# \textbackslash\$ \textbackslash\% \textbackslash \^{}\{\} \textbackslash\& \textbackslash\_ \textbackslash\{ \textbackslash\} \textbackslash\textasciitilde \textbackslash textbackslash.
@@ -37,14 +88,15 @@ Já menciono que há caracteres reservados. São \# \$ \% \^{} \& \_ \{ \} \text
 
 Dando continuidade. Agora será adicionado os chuck's, ambientes ou trechos de código em R, neste material. Ainda estou em duvida qual conteúdo abordo para exemplificar. Antes de fazer um exemplo escreve-se sobres chuck.
 
-A combinação de Latex e R, por meio de arquivos de extensão .Rnw, permite criar documentos ao mesmo tempo realiza análises. O texto é atribuido pelo Latex enquanto a analise em R está no interior dos chuck's. 
+A combinação de \LaTeX{} e R, por meio de arquivos de extensão .Rnw, permite criar documentos ao mesmo tempo realiza análises. O texto é atribuido pelo \LaTeX{} enquanto a analise em R está no interior dos chuck's. \cite{rosas} contribui bastante no conteúdo a seguir. 
 
 O chuck é dado pelo seguinte comando.
-\begin{center}
-< < > > =
-\\Codigo
-arroba
-\end{center}
+  \begin{center}
+    \begin{verbatim}
+    << >> =
+    @
+    \end{verbatim}
+  \end{center}
 Entre os sinais de maior e menor são passados definidas as opções possiveis.
 \begin{itemize}
 \item label: define uma etiqueta para o chuck
@@ -54,7 +106,7 @@ Entre os sinais de maior e menor são passados definidas as opções possiveis.
 \item  height: número, que indica a altura da figura em polegadas. O padrão é height=6.
 \item eval: TRUE/FALSE. Por padrão TRUE. TRUE o codigo é avaliado. FALSE não é avaliado. Serve para quando queremos imprimir o comando no documento mas queremos rodar o código só depois.
 \item result: Um string. Se for igual a verbatim, os resultados aparecem como no R. Se for igual a tex, os resultados aparecem no formato semelhante ao texto do L ATEX . Se for igual a hide, os resultados são omitidos do documento final, mas o código R é executado normalmente. O padrão é results=verbation.
-\item include: TRUE/FALSE. Padrão TRUE. TRUE  a saída do comando R, incluindo os gráficos, devem ser automaticamente inseridos no documento final. FALSE  a saída deve aparecer em um lugar diferente, através de um comando Latex colocado manualmente.
+\item include: TRUE/FALSE. Padrão TRUE. TRUE,  a saída do comando R, incluindo os gráficos, devem ser automaticamente inseridos no documento final. FALSE,  a saída deve aparecer em um lugar diferente, através de um comando \LaTeX colocado manualmente.
 \item prefix.string: Um string que indica um prefixo comum para os arquivos salvos, como as figuras. O padrão é usar o nome do arquivo .Rnw.
 \end{itemize}
 Atenção
@@ -67,8 +119,8 @@ Atenção
 trocando o valor de 0.8 por outro que você queria. Isso pode ser feito em qualquer momento no texto. 
 \end{enumerate}
 \subsection{Exemplo}
-Vamos agora fazer um código simples em R
-<<label="Exempolo",echo=TRUE,eval=FALSE>>=
+Vamos agora fazer um código simples em R. Depois de passado muito tempo sem saber o que implementar, chega-se a exemplo abaixo que trata de imagem de satelite, sensoriamento remoto, com pacote, raster. E classificação nao supervisionada. 
+<<label="Exemplo",echo=TRUE,eval=FALSE>>=
 require(raster)
 require(rgdal)
 
@@ -117,5 +169,9 @@ plotRGB(roca.RGB, r = 3, g = 2, b =  1, stretch = 'hist',axes = F)
 plot(resultado)
 @
 
+%\bibliographystyle{apalike}
+%\bibliography{refs}
+
+\printbibliography
 
 \end{document}
