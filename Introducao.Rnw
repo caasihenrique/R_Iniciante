@@ -13,13 +13,17 @@
 %\usepackage{cite}
 %\usepackage{natbib}
 
+\usepackage{url}
+
+%\usepackage{Sweave}
+
 \usepackage{filecontents}
 
 \begin{filecontents}{refs.bib}
     @article{rosas,
         title = {Sweave-Interface entre R e LATEX},
         author = {Rosa, Cassiano Sousa and DeSouza, Og},
-        url = {http://www.professores.uff.br/jessica/wp-content/uploads/sites                 /137/2017/09/aula_sweave.pdf},
+        url = "http://www.professores.uff.br/jessica/wp-content/uploads/site/137/2017/09/aula_sweave.pdf",
         keywords = {sweave},
         publisher = {Citeseer}
       }
@@ -34,8 +38,6 @@
 
 
 \begin{document}
-\SweaveOpts{concordance=TRUE}
-
 %\SweaveOpts{concordance=TRUE}
 
 %\begin{titlepage}
@@ -93,8 +95,8 @@ A combinação de \LaTeX{} e R, por meio de arquivos de extensão .Rnw, permite 
 O chuck é dado pelo seguinte comando.
   \begin{center}
     \begin{verbatim}
-    << >> =
-    @
+      << >> =
+      @
     \end{verbatim}
   \end{center}
 Entre os sinais de maior e menor são passados definidas as opções possiveis.
@@ -119,59 +121,269 @@ Atenção
 trocando o valor de 0.8 por outro que você queria. Isso pode ser feito em qualquer momento no texto. 
 \end{enumerate}
 \subsection{Exemplo}
-Vamos agora fazer um código simples em R. Depois de passado muito tempo sem saber o que implementar, chega-se a exemplo abaixo que trata de imagem de satelite, sensoriamento remoto, com pacote, raster. E classificação nao supervisionada. 
-<<label="Exemplo",echo=TRUE,eval=FALSE>>=
+Vamos agora fazer um código simples em R. Depois de passado muito tempo sem saber o que implementar, chega-se a exemplo abaixo que trata de imagem de satelite, sensoriamento remoto, com pacote, raster. E classificação nao supervisionada.
+Setar o \emph{Sweave} para não aparecer mensagem e avisos da compilação do \emph{R}
+<<echo=TRUE>>=
+opts_chunk$set(message = FALSE, warning = FALSE,error = FALSE)
+@
+
+Carregar os pacotes necessários
+<<label=pacotes,echo=TRUE,eval=TRUE>>=
 require(raster)
 require(rgdal)
+require(tmap)
+@
+\begin{figure}[h]
+      <<label = mapa,echo=FALSE,eval=TRUE,figure=TRUE,fig.width=4,fig.height=4,fig.align='center'>>=
+        lista <- dir("./mapa",full.names = TRUE)
+        
+        #mapa.pan <- raster(lista[4])
+        #nlayers(mapa.pan)
+        #plot(mapa.pan)
+        
+        mapa.RGB <- raster::stack(lista[1:3])
+        
+        #nlayers(mapa.RGB)
+        #plot(mapa.RGB)
 
-lista <- dir("./mapa",full.names = T)
+        coord <- crs(mapa.RGB)
+        mapa.RGB <- projectRaster(mapa.RGB, crs = '+proj=longlat')
+        plotRGB(mapa.RGB, r = 3, g = 2, b =  1, stretch = 'hist',axes = F)
+      @
+    \caption{Imagem do sensoriamento remoto apartir do satélite LandSat8,
+    acessado de \url{https://search.remotepixel.ca/#3/-21.18/-53.74}}
+    \label{vista_aerea}
+  \end{figure}
 
-mapa.pan <- raster(dir[1])
-nlayers(mapa.pan)
-plot(mapa.pan)
+Exibindo a imagem do sensoriamento remoto na figura \ref{vista_aerea} a seguir.
 
+<<echo=FALSE,eval=FALSE>>=
+#mapa.pan <- projectRaster(mapa.pan, crs = '+proj=longlat')
 
-mapa.RGB <- raster::stack(lista[1:3])
-nlayers(mapa.RGB)
-coord <- crs(mapa.RGB)
-mapa.RGB <- projectRaster(mapa.RGB, crs = '+proj=longlat')
-plotRGB(mapa.RGB, r = 3, g = 2, b =  1, stretch = 'hist',axes = F)
-plot(mapa.RGB)
+#plot(mapa.RGB$B2)
+#plot(mapa.RGB$B3)
+#plot(mapa.RGB$B4)
 
-mapa.pan <- projectRaster(mapa.pan, crs = '+proj=longlat')
+@
 
-plot(mapa.RGB$B2)
-plot(mapa.RGB$B3)
-plot(mapa.RGB$B4)
+Neste momento faz se um corte que contemple a localização desejada.
+<<echo=TRUE,eval=TRUE>>=
+        
+#corte <- drawExtent(show = F)
+        
+corte <- extent(-44.01979,-43.94486,-17.62397,-17.55794)
 
-corte <- drawExtent(show = F)
 regiao.B2 <- crop(mapa.RGB$B2,corte)
 regiao.B3 <- crop(mapa.RGB$B3,corte)
 regiao.B4 <- crop(mapa.RGB$B4,corte)
-regiao.B8 <- crop(mapa.pan,corte)
+#regiao.B8 <- crop(mapa.pan,corte)
 
-writeRaster(regiao.B2, filename= "./mapa/regiao_B2.tif",format='GTiff')
-writeRaster(regiao.B3, filename= "./mapa/regiao_B3.tif",format='GTiff')
-writeRaster(regiao.B4, filename= "./mapa/regiao_B4.tif",format='GTiff')
-writeRaster(regiao.B8, filename= "./mapa/regiao_B8.tif",format='GTiff')
-
-roca.RGB <- stack(c(regiao.B2,regiao.B3,regiao.B4))
-plotRGB(roca.RGB, r = 3, g = 2, b =  1, stretch = 'hist',axes = F)
-zoom(mapa.RGB, ext=corte, maxpixels = 100000, layer = 1,
-new=TRUE, useRaster=TRUE)
-
-resultadoskMeans <- kmeans(roca.RGB[], centers=8)
-resultado <- raster(roca.RGB[[1]])
-resultado <- setValues(resultado, resultadoskMeans$cluster)
-
-par(mfrow = c(1,2))
-plotRGB(roca.RGB, r = 3, g = 2, b =  1, stretch = 'hist',axes = F)
-plot(resultado)
+#writeRaster(regiao.B2, filename= "./mapa/regiao_B2.tif",format='GTiff')
+#writeRaster(regiao.B3, filename= "./mapa/regiao_B3.tif",format='GTiff')
+#writeRaster(regiao.B4, filename= "./mapa/regiao_B4.tif",format='GTiff')
+#writeRaster(regiao.B8, filename= "./mapa/regiao_B8.tif",format='GTiff')
 @
 
+ \begin{figure}
+    <<label=localizacao,echo=FALSE,eval=TRUE,fig=TRUE,fig.width=4,fig.height=4,fig.align='center'>>=
+      roca.RGB <- stack(c(regiao.B2,regiao.B3,regiao.B4))
+      plotRGB(roca.RGB, r = 3, g = 2, b =  1, stretch = 'hist',maxpixels = 5000000, alpha = 255)
+      #, axes = TRUE, xlab = 'Longitude', ylab = 'Latitude'
+      #zoom(mapa.RGB, ext=corte, maxpixels = 100000, layer = 1,new=TRUE,              useRaster=TRUE)
+    @
+    \caption{Corte da imagem de sensoriamento remoto \ref{vista_aerea}, de                  interesse}
+    \label{corte}
+  \end{figure}
+
+Apartir do corte desejado, o observa na figura \ref{corte} a seguir.
+Aplicando o método de clusterização \emph{Kmeans} pode se obter uma classificação da região desejada.  
+<<echo=TRUE,eval=TRUE>>=
+resultadoskMeans <- kmeans(roca.RGB[], centers=8)
+resultadoskMeans_Q <- kmeans(roca.RGB[], centers=8,algorithm = 'MacQueen')
+resultadoskMeans_L <- kmeans(roca.RGB[], centers=8,algorithm = 'Lloyd')
+      
+resultado.B2 <- raster(roca.RGB[[1]])
+resultado.B3 <- raster(roca.RGB[[2]])
+resultado.B4 <- raster(roca.RGB[[3]])
+
+resultado.B2 <- setValues(resultado.B2, resultadoskMeans$cluster)
+resultado.B3 <- setValues(resultado.B3, resultadoskMeans_Q$cluster)
+resultado.B4 <- setValues(resultado.B4, resultadoskMeans_L$cluster)
+@
+
+<<echo=FALSE,eval=FALSE>>=
+par(mfrow = c(1,3))
+plot(resultado.B2,axes=FALSE)
+plot(resultado.B3,axes=FALSE)
+plot(resultado.B4,axes=FALSE)
+@
+
+
+  \begin{figure}
+      <<echo=FALSE,eval=TRUE,fig=TRUE,fig.width=4,fig.height=4,fig.align='center'>>=
+        par(mfrow = c(1,2))
+        plotRGB(roca.RGB, r = 3, g = 2, b =  1, stretch = 'hist',axes = F)
+        plot(resultado.B2,axes=FALSE)
+      @
+    \caption{Classificação obtida apartir do método de clusterização                  \emph{Kmeans}.}
+    \label{Kmeans}
+  \end{figure}
+
+Na figura \ref{Kmeans} a seguir observa se a classificação obtida da região desejada.
+Para os dois outros métodos de clusterização é necessario usar os dois \emph{packages} \emph{cluster} e \emph{randomForest}.
+
+
+<<echo=TRUE,eval=TRUE>>=
+library("cluster")
+library("randomForest")
+@
+
+<<label=valor,echo=FALSE,eval=TRUE>>=
+ valores <- getValues(roca.RGB)
+@
+
+  \begin{figure}
+      <<echo=FALSE,eval=TRUE,fig=TRUE,fig.width=4,fig.height=4,fig.align='center'>>=
+         <<valor>>
+          index <- which(!is.na(valores))
+          valores <- na.omit(valores)
+          resultadoClara <- clara(valores, k = 8, samples = 500, metric = "manhattan", pamLike = TRUE)
+          
+          imagemClara <- raster(roca.RGB)
+          imagemClara[index] <- resultadoClara$clustering
+          
+          par(mfrow= c(1,2))
+          plotRGB(roca.RGB, r = 3, g = 2, b =  1, stretch = 'hist',axes = F)
+          plot(imagemClara,axes = FALSE)
+      @
+    \caption{Clusters apartir do \emph{package} \emph{cluster}}
+    \label{Cluster}
+  \end{figure}
+Utilizando se o \emph{package} \emph{cluster} obteve os seguintes clusters, visto na figura \ref{Cluster}.
+
+  \begin{figure}
+      <<echo=FALSE,eval=TRUE,fig=TRUE,fig.width=4,fig.height=4,fig.align='center'>>=
+        <<valor>>
+        imagemAmostra <- valores[sample(nrow(valores), 500),]
+        rf <- randomForest(imagemAmostra)
+        rf_prox <- randomForest(imagemAmostra, ntree=1000, proximity = TRUE)$proximity
+        
+        E_rf <- kmeans(rf_prox, 8)
+        rf <- randomForest(imagemAmostra, as.factor(E_rf$cluster), ntree = 500)
+        rf_raster <- predict(roca.RGB, rf)
+        
+        par(mfrow = c(1,2))
+        plotRGB(roca.RGB, r = 3, g = 2, b =  1, stretch = 'hist',axes = F)
+        plot(rf_raster,axes = FALSE)
+      @
+    \caption{Clusters apartir do \emph{package} \emph{randomForest}}
+    \label{RandForest}
+  \end{figure}
+Já o \emph{package} \emph{randomForest} gera a seguinte figura \ref{RandForest} com a clusterização.
+
+
+  \begin{figure}
+      <<echo=FALSE,eval=TRUE,fig=TRUE,fig.width=7,fig.height=7,fig.align='center'>>=
+        par(mfrow = c(2,3))
+        plot(resultado.B2,axes=FALSE)
+        plot(resultado.B3,axes=FALSE)
+        plot(resultado.B4,axes=FALSE)
+        plot(imagemClara,axes = FALSE)
+        plot(rf_raster, axes = FALSE)
+      @
+    \caption{Os três técnicas de clasterização}
+    \label{todos}
+  \end{figure}
+Colocando todas as cinco clusterização na figura \ref{todos} é observado a seguir.
+
+<<label=a,echo=TRUE,eval=TRUE>>=
+l5 <- raster::stretch(roca.RGB, minq=0.02, maxq=0.98)
+
+a <- tm_shape(l5) + 
+     tm_rgb(r = 3, g = 2, b = 1) +
+     #tm_graticules(lines = TRUE) +
+     #tm_compass(position = c("right", "top")) +
+     #tm_scale_bar(text.size = .7) +
+     tm_layout(main.title = "Área de Joaquim Felicío", 
+               main.title.position = "center",
+               legend.position = c("left", "bottom"))
+@
+
+<<label=b,echo=TRUE,eval=TRUE>>=
+b <- tm_shape(resultado.B2) +
+     tm_raster(palette = cptcity::cpt(pal = cptcity::find_cpt("dem")[8]), 
+               legend.is.portrait = FALSE, title = 'Usos') +
+     #tm_graticules(lines = TRUE) +
+     #tm_compass(position = c("right", "top")) +
+     #tm_scale_bar(text.size = .7) +
+     tm_layout(main.title = "Kmeans", 
+               main.title.position = "center",
+               legend.position = c("left", "bottom"))
+@
+
+<<label=c,echo=TRUE,eval=TRUE>>=
+c <- tm_shape(resultado.B3) +
+     tm_raster(palette = cptcity::cpt(pal = cptcity::find_cpt("dem")[8]), 
+               legend.is.portrait = FALSE, title = 'Usos') +
+     #tm_graticules(lines = TRUE) +
+     #tm_compass(position = c("right", "top")) +
+     #tm_scale_bar(text.size = .7) +
+     tm_layout(main.title = "MacQueen", 
+               main.title.position = "center",
+               legend.position = c("left", "bottom"))
+@
+
+<<label=d,echo=TRUE,eval=TRUE>>=
+d <- tm_shape(resultado.B4) +
+     tm_raster(palette = cptcity::cpt(pal = cptcity::find_cpt("dem")[8]), 
+               legend.is.portrait = FALSE, title = 'Usos') +
+     #tm_graticules(lines = TRUE) +
+     #tm_compass(position = c("right", "top")) +
+     #tm_scale_bar(text.size = .7) +
+     tm_layout(main.title = "Lloyd", 
+               main.title.position = "center",
+               legend.position = c("left", "bottom"))
+@
+
+<<label=e,echo=TRUE,eval=TRUE>>=
+e <- tm_shape(imagemClara) +
+     tm_raster(palette = cptcity::cpt(pal = cptcity::find_cpt("dem")[8]), 
+               legend.is.portrait = FALSE, title = 'Usos') +
+     #tm_graticules(lines = TRUE) +
+     #tm_compass(position = c("right", "top")) +
+     #tm_scale_bar(text.size = .7) +
+     tm_layout(main.title = "Cluster", 
+               main.title.position = "center",
+               legend.position = c("left", "bottom"))
+@
+
+<<label=f,echo=TRUE,eval=TRUE>>=
+f <- tm_shape(rf_raster) +
+     tm_raster(palette = cptcity::cpt(pal = cptcity::find_cpt("dem")[8]), 
+               legend.is.portrait = FALSE, title = 'Usos') +
+     #tm_graticules(lines = TRUE) +
+     #tm_compass(position = c("right", "top")) +
+     #tm_scale_bar(text.size = .7) +
+     tm_layout(main.title = "RandomForest", 
+               main.title.position = "center",
+               legend.position = c("left", "bottom"))
+@
+
+  \begin{figure}
+      <<echo=FALSE,eval=TRUE,fig=TRUE,fig.width=7,fig.height=7,fig.align='center'>>=
+        <<a>>
+        <<b>>
+        <<c>>
+        <<d>>
+        <<e>>
+        tmap_arrange(a,b,c,d,e)
+      @
+    \caption{O recorte e o resultado dos três métodos, \emph{Kmeans}, \emph{cluster} e \emph{RandomForest} aplicado.}
+    \label{junto}
+  \end{figure}
+Juntando os resultados na figura \ref{junto} seguinte, percebe o resultado.
 %\bibliographystyle{apalike}
 %\bibliography{refs}
-
 \printbibliography
 
 \end{document}
